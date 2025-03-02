@@ -1,0 +1,14 @@
+identity:
+  author: keyleaf
+  name: pdf
+  label:
+    en_US: pdf
+    zh_Hans: pdf
+    pt_BR: pdf
+  description:
+    en_US: A tool for operate the pdf.
+    zh_Hans: 一个用于操作pdf的工具。
+    pt_BR: A tool for operate the pdf.
+  icon: icon.svg
+  tags:
+    - utilities
