@@ -1,13 +1,14 @@
-import logging
 import io
+import logging
 import mimetypes
 from collections.abc import Generator
 from typing import Any, Optional
 
+from unstructured.partition.pdf_image.pdf_image_utils import convert_pdf_to_images
+
 from core.file.file_manager import download
 from core.tools.builtin_tool.tool import BuiltinTool
 from core.tools.entities.tool_entities import ToolInvokeMessage
-from unstructured.partition.pdf_image.pdf_image_utils import convert_pdf_to_images
 
 logger = logging.getLogger(__name__)
 
