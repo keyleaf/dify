@@ -1,10 +1,12 @@
 import io
 import logging
-import pdf2image
 from collections.abc import Generator
-from typing import Any, Optional
 from pathlib import Path
+from typing import Any, Optional
+
+import pdf2image
 from unstructured.partition.common.common import convert_to_bytes
+
 from core.file.file_manager import download
 from core.tools.builtin_tool.tool import BuiltinTool
 from core.tools.entities.tool_entities import ToolInvokeMessage
