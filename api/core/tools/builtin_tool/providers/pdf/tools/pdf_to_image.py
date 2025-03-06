@@ -1,11 +1,10 @@
 import io
 import logging
-import mimetypes
+import pdf2image
 from collections.abc import Generator
 from typing import Any, Optional
-
-from unstructured.partition.pdf_image.pdf_image_utils import convert_pdf_to_images
-
+from pathlib import Path
+from unstructured.partition.common.common import convert_to_bytes
 from core.file.file_manager import download
 from core.tools.builtin_tool.tool import BuiltinTool
 from core.tools.entities.tool_entities import ToolInvokeMessage
@@ -23,12 +22,19 @@ class PdfToImageTool(BuiltinTool):
             message_id: Optional[str] = None,
     ) -> Generator[ToolInvokeMessage, None, None]:
         file = tool_parameters.get("pdf_file")
-        mimetype = mimetypes.guess_type("123.pdf")
         logger.info("file {} type is {} mime type is {}".format(file, file.type, file.mime_type))
         if file.mime_type != "application/pdf":  # type: ignore
             yield self.create_text_message("not a valid pdf file")
             return
-#       将pdf拆分成图片并返回图片路径列表
+        #       将pdf拆分成图片并返回图片路径列表
         pdf_binary = io.BytesIO(download(file))
-        r = list(convert_pdf_to_images("", pdf_binary))
-        yield self.create_file_message(r[0])
+        f_bytes = convert_to_bytes(pdf_binary)
+        images = list(pdf2image.convert_from_bytes(f_bytes, fmt="jpg", output_folder="./"))
+
+        result = []
+        for image in images:
+            imageFile = Path(image.filename).read_bytes()
+            yield self.create_blob_message(imageFile,
+                                           meta={'mime_type': 'image/jpeg'})
+
+        # logger.info("dir is {}".format(image))
