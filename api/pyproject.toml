@@ -83,6 +83,7 @@ yarl = "~1.18.3"
 # Related transparent dependencies with pinned version
 # required by main implementations
 ############################################################
+pdf2image = "^1.17.0"
 [tool.poetry.group.indirect.dependencies]
 kaleido = "0.2.1"
 rank-bm25 = "~0.2.2"
@@ -175,3 +176,9 @@ optional = true
 [tool.poetry.group.lint.dependencies]
 dotenv-linter = "~0.5.0"
 ruff = "~0.9.2"
+
+
+[[tool.poetry.source]]
+name = "mirrors"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+priority = "primary"

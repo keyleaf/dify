@@ -31,7 +31,7 @@ class PdfToImageTool(BuiltinTool):
         #       将pdf拆分成图片并返回图片路径列表
         pdf_binary = io.BytesIO(download(file))
         f_bytes = convert_to_bytes(pdf_binary)
-        images = list(pdf2image.convert_from_bytes(f_bytes, fmt="jpg", output_folder="./"))
+        images = list(pdf2image.convert_from_bytes(f_bytes, fmt="jpg", output_folder="/app/api/storage/pdf_to_images"))
 
         result = []
         for image in images:
