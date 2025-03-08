@@ -2,3 +2,6 @@
 in-project = true
 create = true
 prefer-active-python = true
+
+[repositories]
+my-custom-source = { url = "https://pypi.tuna.tsinghua.edu.cn/simple" }
