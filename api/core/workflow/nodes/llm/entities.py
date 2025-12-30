@@ -38,6 +38,22 @@ class VisionConfig(BaseModel):
         return v
 
 
+class DocumentConfigOptions(BaseModel):
+    variable_selector: Sequence[str] = Field(default_factory=lambda: ["sys", "files"])
+
+
+class DocumentConfig(BaseModel):
+    enabled: bool = False
+    configs: DocumentConfigOptions = Field(default_factory=DocumentConfigOptions)
+
+    @field_validator("configs", mode="before")
+    @classmethod
+    def convert_none_configs(cls, v: Any):
+        if v is None:
+            return DocumentConfigOptions()
+        return v
+
+
 class PromptConfig(BaseModel):
     jinja2_variables: Sequence[VariableSelector] = Field(default_factory=list)
 
@@ -65,6 +81,7 @@ class LLMNodeData(BaseNodeData):
     memory: MemoryConfig | None = None
     context: ContextConfig
     vision: VisionConfig = Field(default_factory=VisionConfig)
+    document: DocumentConfig = Field(default_factory=DocumentConfig)
     structured_output: Mapping[str, Any] | None = None
     # We used 'structured_output_enabled' in the past, but it's not a good name.
     structured_output_switch_on: bool = Field(False, alias="structured_output_enabled")

@@ -481,6 +481,10 @@ export type VisionSetting = {
   detail: Resolution
 }
 
+export type DocumentSetting = {
+  variable_selector: ValueSelector
+}
+
 export enum WorkflowVersionFilterOptions {
   all = 'all',
   onlyYours = 'onlyYours',

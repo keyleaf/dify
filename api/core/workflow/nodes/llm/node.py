@@ -169,15 +169,24 @@ class LLMNode(Node[LLMNodeData]):
             # merge inputs
             inputs.update(jinja_inputs)
 
-            # fetch files
-            files = (
-                llm_utils.fetch_files(
+            # fetch files from vision and document configs
+            files: list["File"] = []
+            
+            # fetch vision files
+            if self.node_data.vision.enabled:
+                vision_files = llm_utils.fetch_files(
                     variable_pool=variable_pool,
                     selector=self.node_data.vision.configs.variable_selector,
                 )
-                if self.node_data.vision.enabled
-                else []
-            )
+                files.extend(vision_files)
+            
+            # fetch document files
+            if self.node_data.document.enabled:
+                document_files = llm_utils.fetch_files(
+                    variable_pool=variable_pool,
+                    selector=self.node_data.document.configs.variable_selector,
+                )
+                files.extend(document_files)
 
             if files:
                 node_inputs["#files#"] = [file.to_dict() for file in files]
@@ -228,6 +237,7 @@ class LLMNode(Node[LLMNodeData]):
                 memory_config=self.node_data.memory,
                 vision_enabled=self.node_data.vision.enabled,
                 vision_detail=self.node_data.vision.configs.detail,
+                document_enabled=self.node_data.document.enabled,
                 variable_pool=variable_pool,
                 jinja2_variables=self.node_data.prompt_config.jinja2_variables,
                 tenant_id=self.tenant_id,
@@ -782,6 +792,7 @@ class LLMNode(Node[LLMNodeData]):
         memory_config: MemoryConfig | None = None,
         vision_enabled: bool = False,
         vision_detail: ImagePromptMessageContent.DETAIL,
+        document_enabled: bool = False,
         variable_pool: VariablePool,
         jinja2_variables: Sequence[VariableSelector],
         tenant_id: str,
@@ -882,7 +893,7 @@ class LLMNode(Node[LLMNodeData]):
             raise TemplateTypeNotSupportError(type_name=str(type(prompt_template)))
 
         # The sys_files will be deprecated later
-        if vision_enabled and sys_files:
+        if (vision_enabled or document_enabled) and sys_files:
             file_prompts = []
             for file in sys_files:
                 file_prompt = file_manager.to_prompt_message_content(file, image_detail_config=vision_detail)
@@ -899,7 +910,7 @@ class LLMNode(Node[LLMNodeData]):
                 prompt_messages.append(UserPromptMessage(content=file_prompts))
 
         # The context_files
-        if vision_enabled and context_files:
+        if (vision_enabled or document_enabled) and context_files:
             file_prompts = []
             for file in context_files:
                 file_prompt = file_manager.to_prompt_message_content(file, image_detail_config=vision_detail)

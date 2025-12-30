@@ -4,6 +4,7 @@ from .entities import (
     LLMNodeData,
     ModelConfig,
     VisionConfig,
+    DocumentConfig,
 )
 from .node import LLMNode
 
@@ -14,4 +15,5 @@ __all__ = [
     "LLMNodeData",
     "ModelConfig",
     "VisionConfig",
+    "DocumentConfig",
 ]

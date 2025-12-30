@@ -9,6 +9,7 @@ import {
 } from '../../hooks'
 import useAvailableVarList from '../_base/hooks/use-available-var-list'
 import useConfigVision from '../../hooks/use-config-vision'
+import useConfigDocument from '../../hooks/use-config-document'
 import type { LLMNodeType, StructuredOutput } from './types'
 import { useModelList, useModelListAndDefaultModelAndCurrentProviderAndModel } from '@/app/components/header/account-setting/model-provider-page/hooks'
 import {
@@ -123,6 +124,21 @@ const useConfig = (id: string, payload: LLMNodeType) => {
     onChange: (newPayload) => {
       const newInputs = produce(inputRef.current, (draft) => {
         draft.vision = newPayload
+      })
+      setInputs(newInputs)
+    },
+  })
+
+  const {
+    isDocumentModel: isDocumentModelFromHook,
+    handleDocumentEnabledChange,
+    handleDocumentConfigChange,
+    handleModelChanged: handleDocumentConfigAfterModelChanged,
+  } = useConfigDocument(model, {
+    payload: inputs.document || { enabled: false },
+    onChange: (newPayload) => {
+      const newInputs = produce(inputRef.current, (draft) => {
+        draft.document = newPayload
       })
       setInputs(newInputs)
     },
@@ -288,6 +304,7 @@ const useConfig = (id: string, payload: LLMNodeType) => {
     ?.models.find(modelItem => modelItem.model === model?.name)
     ?.features?.includes(ModelFeatureEnum.StructuredOutput)
 
+
   const [structuredOutputCollapsed, setStructuredOutputCollapsed] = useState(true)
   const handleStructureOutputEnableChange = useCallback((enabled: boolean) => {
     const newInputs = produce(inputRef.current, (draft) => {
@@ -368,6 +385,9 @@ const useConfig = (id: string, payload: LLMNodeType) => {
     handleStructureOutputEnableChange,
     filterJinja2InputVar,
     handleReasoningFormatChange,
+    isDocumentModel: isDocumentModelFromHook,
+    handleDocumentEnabledChange,
+    handleDocumentConfigChange,
   }
 }
 

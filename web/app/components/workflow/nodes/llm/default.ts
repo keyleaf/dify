@@ -53,6 +53,9 @@ const nodeDefault: NodeDefault<LLMNodeType> = {
     vision: {
       enabled: false,
     },
+    document: {
+      enabled: false,
+    },
   },
   defaultRunInputData: {
     '#context#': [RETRIEVAL_OUTPUT_STRUCT],

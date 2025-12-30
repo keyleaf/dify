@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import MemoryConfig from '../_base/components/memory-config'
 import VarReferencePicker from '../_base/components/variable/var-reference-picker'
 import ConfigVision from '../_base/components/config-vision'
+import ConfigDocument from '../_base/components/config-document'
 import useConfig from './use-config'
 import type { LLMNodeType } from './types'
 import ConfigPrompt from './components/config-prompt'
@@ -63,6 +64,9 @@ const Panel: FC<NodePanelProps<LLMNodeType>> = ({
     handleStructureOutputChange,
     filterJinja2InputVar,
     handleReasoningFormatChange,
+    isDocumentModel,
+    handleDocumentEnabledChange,
+    handleDocumentConfigChange,
   } = useConfig(id, data)
 
   const model = inputs.model
@@ -239,6 +243,17 @@ const Panel: FC<NodePanelProps<LLMNodeType>> = ({
           onEnabledChange={handleVisionResolutionEnabledChange}
           config={inputs.vision?.configs}
           onConfigChange={handleVisionResolutionChange}
+        />
+
+        {/* Document: document-supported models */}
+        <ConfigDocument
+          nodeId={id}
+          readOnly={readOnly}
+          isDocumentModel={isDocumentModel}
+          enabled={inputs.document?.enabled || false}
+          onEnabledChange={handleDocumentEnabledChange}
+          config={inputs.document?.configs}
+          onConfigChange={handleDocumentConfigChange}
         />
 
         {/* Reasoning Format */}

@@ -1,4 +1,4 @@
-import type { CommonNodeType, Memory, ModelConfig, PromptItem, ValueSelector, Variable, VisionSetting } from '@/app/components/workflow/types'
+import type { CommonNodeType, Memory, ModelConfig, PromptItem, ValueSelector, Variable, VisionSetting, DocumentSetting } from '@/app/components/workflow/types'
 
 export type LLMNodeType = CommonNodeType & {
   model: ModelConfig
@@ -14,6 +14,10 @@ export type LLMNodeType = CommonNodeType & {
   vision: {
     enabled: boolean
     configs?: VisionSetting
+  }
+  document?: {
+    enabled: boolean
+    configs?: DocumentSetting
   }
   structured_output_enabled?: boolean
   structured_output?: StructuredOutput
